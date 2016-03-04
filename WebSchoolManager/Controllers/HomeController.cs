@@ -53,37 +53,9 @@ namespace WebSchoolManager.Controllers
             return View();
         }
 
-        public ActionResult EditPupil(int? pupilid)
-        {
-            if (pupilid != null)
-            {
-                Pupil p = sm.RepPupil.GetByKey(pupilid);
-                ViewBag.Forms = sm.RepForm.Get();
-                return View(p);
-            }
-            return RedirectToAction("Index", "Home", new IndexViewModel());
-        }
-
-        public ActionResult SavePupil(Pupil p)
+        public void SavePupil(Pupil p)
         {
             sm.RepPupil.Update(p);
-            return RedirectToAction("Index", "Home", new IndexViewModel { SelectedForm = p.FormId });
-        }
-
-        public PartialViewResult PupilTable(int SelectedForm, string submit)
-        {
-            if ( submit == "Tests anzeigen")
-            {
-                var tvm = new TestViewModel
-                {
-                    Pupils = sm.RepPupil.Get(p => p.FormId == SelectedForm, "Marks"),
-                    Tests = sm.RepTest.Get(t => t.FormId == SelectedForm),
-                    SelectedForm = SelectedForm
-                };
-                return PartialView("PartialTestTable", tvm);
-            }
-            else
-                return PartialView("PartialPupilTable", sm.RepPupil.Get(p => p.FormId == SelectedForm));
         }
 
         public ActionResult SaveMarks(int SelectedForm)
