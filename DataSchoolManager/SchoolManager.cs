@@ -14,21 +14,21 @@ namespace DataSchoolManager
     {
         public SchoolRepository<Form> RepForm { get; } = new SchoolRepository<Form>();
         public SchoolRepository<Pupil> RepPupil { get; } = new SchoolRepository<Pupil>();
+        public SchoolRepository<Test> RepTest { get; } = new SchoolRepository<Test>();
+        public SchoolRepository<Mark> RepMark { get; } = new SchoolRepository<Mark>();
 
         public event ProgressHandler Progress;
 
         public void ImportAsync(string filename)
         {
-            new Thread(() => { Import(filename); }).Start();
+            new Thread(() => { Import(new FileStream(filename, FileMode.Open)); }).Start();
         }
 
-        public void Import(string filename)
+        public void Import(Stream stream)
         {
-            filename = @"C:\Users\MET\Dropbox\School\PR.CSharp\part3\Uebungen\05_PupilFinder\ListeAllerSchuelerLeonding.csv";
             RepPupil.DeleteAll();
             RepForm.DeleteAll();
-            StreamReader sr = new StreamReader((string)filename, Encoding.Default);
-            FileInfo fi = new FileInfo((string)filename);
+            StreamReader sr = new StreamReader(stream, Encoding.Default);
             int bytesRead = sr.ReadLine().Length + 2;
             while (!sr.EndOfStream)
             {
@@ -53,8 +53,13 @@ namespace DataSchoolManager
                 });
                 // Methodenaufruf über den Delegate
                 if (this.Progress != null)
-                    this.Progress(bytesRead * 100 / (int)fi.Length);
+                    this.Progress(bytesRead * 100 / (int)stream.Length);
             }
+        }
+
+        public void PersistMark(int testid, int pupilid, int mark)
+        {
+            
         }
     }
 }

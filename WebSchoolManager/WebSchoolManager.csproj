@@ -178,7 +178,9 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Home\EditPupil.cshtml" />
-    <Content Include="Views\Home\PartialViewTable.cshtml" />
+    <Content Include="Views\Home\PartialPupilTable.cshtml" />
+    <Content Include="Views\Home\PartialTestTable.cshtml" />
+    <Content Include="Views\Home\PartialMarkSelection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

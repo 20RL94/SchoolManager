@@ -11,7 +11,20 @@ namespace WebSchoolManager.Models
     {
         public IEnumerable<Pupil> Pupils { get; set; }
         public IEnumerable<Form> Forms { get; set; }
-        public int? SelectedForm { get; set; } 
-        // ? ... Integer, der den Wert null haben kann (Nullable Value)
+        public int? SelectedForm { get; set; }
+    }
+
+    public class TestViewModel
+    {
+        public IEnumerable<Pupil> Pupils { get; set; }
+        public IEnumerable<Test> Tests { get; set; }
+        public int SelectedForm { get; set; }
+    }
+
+    public class MarkSelectionModel
+    {
+        public Pupil Pupil { get; set; }
+        public int TestId { get; set; }
+        public int SelectedForm { get; set; }
     }
 }

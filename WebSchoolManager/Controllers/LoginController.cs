@@ -12,12 +12,13 @@ namespace WebSchoolManager.Controllers
     public class LoginController : Controller
     {
         SchoolManager sm = new SchoolManager();
+
         public ActionResult Index(LoginViewModel lvm)
         {
-            if (lvm.Username != null)
+            if ( lvm.Username != null )
             {
                 Pupil pupil = sm.RepPupil.Get(p => p.Lastname == lvm.Username).FirstOrDefault();
-                if (pupil != null)
+                if ( pupil != null )
                 {
                     Session["user"] = pupil;
                     FormsAuthentication.SetAuthCookie(pupil.Lastname, false);

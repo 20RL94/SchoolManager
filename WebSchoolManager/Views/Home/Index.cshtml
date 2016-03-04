@@ -10,25 +10,25 @@
 </form>
 
 <br />
-@*using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "form1", name = "form1" }))
-{
-    <label>Klassen</label>
-    @Html.DropDownListFor(m => m.SelectedForm, new SelectList(Model.Forms, "FormId", "Name"));
-    <input type="submit" class="btn btn-primary btn-sm" value="Schüler anzeigen" />
-}*@
-@using (Ajax.BeginForm(new AjaxOptions { Url = "pupiltable", UpdateTargetId = "pupiltable" }))
+
+@*@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "form1", name = "form1" }))
 {
     <label class="col-md-2">Klassen</label>
-    @Html.DropDownListFor(m => m.SelectedForm, new SelectList(Model.Forms, "FormId", "Name"));
-    <input type = "submit" class="btn btn-primary btn-sm" value="Schüler anzeigen" />
+    @Html.DropDownListFor(m => m.SelectedForm, new SelectList(Model.Forms, "FormId", "Name"), new { @class = "form-control col-md-8", onchange = "document.form1.submit()" })
+    <input type="submit" class="btn btn-primary btn-sm col-md-2" value="Schüler anzeigen" />
+}*@
+
+
+@using (Ajax.BeginForm(new AjaxOptions { Url = "/home/pupiltable", UpdateTargetId = "table" }))
+{ 
+    <label class="col-md-2">Klassen</label>
+    @Html.DropDownListFor(m => m.SelectedForm, new SelectList(Model.Forms, "FormId", "Name"), new { @class = "form-control col-md-8"})
+    <input type="submit" name="submit" class="btn btn-primary btn-sm col-md-2" value="Schüler anzeigen" />
+    <input type="submit" name="submit" class="btn btn-primary btn-sm col-md-2" value="Tests anzeigen" />
 }
+
 <br />
-@*Html.Partial("PartialViewTable", Model.Pupils)*@
-<div id="pupiltable"></div>
-
-@{  string test = "hallo"; }
-<div>@test</div>
-
-
+@*@Html.Partial("PartialPupilTable", Model.Pupils)*@
+<div id="table"></div>
 
 
