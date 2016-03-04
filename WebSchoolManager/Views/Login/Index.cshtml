@@ -1,0 +1,14 @@
+﻿@model WebSchoolManager.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Anmeldung</h2>
+
+@using (Html.BeginForm("Index", "Login"))
+{
+    <label>Benutzername</label>
+    @Html.TextBoxFor(m => m.Username)
+    <input type="submit" value="anmelden" />
+}

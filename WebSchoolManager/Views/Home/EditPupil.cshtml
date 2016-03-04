@@ -1,0 +1,72 @@
+﻿@model DataSchoolManager.Pupil
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Schülerdaten bearbeiten</h2>
+
+@using (Html.BeginForm("SavePupil", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken();
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.PupilId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Firstname, htmlAttributes: new { @class ="control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Firstname, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Firstname, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Lastname, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Lastname, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Lastname, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MatrikelNo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MatrikelNo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MatrikelNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Sex, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Sex, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Sex, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Birthday, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Birthday, htmlAttributes: new { @Value = Model.Birthday.ToShortDateString(), @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Birthday, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Klasse", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.FormId, new SelectList(ViewBag.Forms, "FormId", "Name"), new { @class = "form-control"})
+                @Html.ValidationMessageFor(model => model.FormId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.ActionLink("zurück zur Übersicht", "Index", new { SelectedForm = Model.FormId }, new { @class = "btn btn-primary btn-sm" })
+            <div class="col-md-10">
+                <input type="submit" value="Speichern" class="btn btn-primary btn-sm col-md-10"/>
+            </div>
+        </div>
+    </div>
+}

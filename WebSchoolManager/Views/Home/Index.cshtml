@@ -1,0 +1,34 @@
+﻿@model WebSchoolManager.Models.IndexViewModel
+
+@{
+    ViewBag.Title = "Startseite";
+}
+<br />
+<form action="/home/import" method="post" enctype="multipart/form-data">
+    <input id="file" name="file" type="file" style="display:inline"/>
+    <input type="submit" value="Schülerdaten importieren" class="btn btn-primary btn-sm" />
+</form>
+
+<br />
+@*using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "form1", name = "form1" }))
+{
+    <label>Klassen</label>
+    @Html.DropDownListFor(m => m.SelectedForm, new SelectList(Model.Forms, "FormId", "Name"));
+    <input type="submit" class="btn btn-primary btn-sm" value="Schüler anzeigen" />
+}*@
+@using (Ajax.BeginForm(new AjaxOptions { Url = "pupiltable", UpdateTargetId = "pupiltable" }))
+{
+    <label class="col-md-2">Klassen</label>
+    @Html.DropDownListFor(m => m.SelectedForm, new SelectList(Model.Forms, "FormId", "Name"));
+    <input type = "submit" class="btn btn-primary btn-sm" value="Schüler anzeigen" />
+}
+<br />
+@*Html.Partial("PartialViewTable", Model.Pupils)*@
+<div id="pupiltable"></div>
+
+@{  string test = "hallo"; }
+<div>@test</div>
+
+
+
+

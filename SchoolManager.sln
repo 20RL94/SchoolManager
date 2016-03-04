@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSchoolManager", "WebSchoolManager\WebSchoolManager.csproj", "{FE0AEE7A-9BBF-4C34-9A1E-E3814928987A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataSchoolManager", "DataSchoolManager\DataSchoolManager.csproj", "{BA5ADE4E-5F75-4175-8C03-26B1B89B07DD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FE0AEE7A-9BBF-4C34-9A1E-E3814928987A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE0AEE7A-9BBF-4C34-9A1E-E3814928987A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE0AEE7A-9BBF-4C34-9A1E-E3814928987A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE0AEE7A-9BBF-4C34-9A1E-E3814928987A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA5ADE4E-5F75-4175-8C03-26B1B89B07DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA5ADE4E-5F75-4175-8C03-26B1B89B07DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA5ADE4E-5F75-4175-8C03-26B1B89B07DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA5ADE4E-5F75-4175-8C03-26B1B89B07DD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
