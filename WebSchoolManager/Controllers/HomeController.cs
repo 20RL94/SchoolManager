@@ -20,14 +20,15 @@ namespace WebSchoolManager.Controllers
             
         }
 
-
-        public ActionResult Index(IndexViewModel ivm)
+        public JsonResult GetPupils(int formid)
         {
-            ivm.Forms = sm.RepForm.Get();
-            ivm.Pupils = ivm.SelectedForm != null ? 
-                  sm.RepPupil.Get(f => f.Form.FormId == ivm.SelectedForm) :
-                  new Pupil[0];
-            return View(ivm);
+            return Json(sm.RepPupil.Get(p => p.FormId == formid)
+                .Select(p => p.ToDto()), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Index()
+        {
+            return View();
         }
 
         [HttpPost]

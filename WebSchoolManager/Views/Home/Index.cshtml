@@ -1,6 +1,4 @@
-﻿@model WebSchoolManager.Models.IndexViewModel
-
-@{
+﻿@{
     ViewBag.Title = "Startseite";
 }
 <br />
@@ -10,25 +8,22 @@
 </form>
 
 <br />
-
-@*@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "form1", name = "form1" }))
-{
+<div>
     <label class="col-md-2">Klassen</label>
-    @Html.DropDownListFor(m => m.SelectedForm, new SelectList(Model.Forms, "FormId", "Name"), new { @class = "form-control col-md-8", onchange = "document.form1.submit()" })
-    <input type="submit" class="btn btn-primary btn-sm col-md-2" value="Schüler anzeigen" />
-}*@
-
-
-@using (Ajax.BeginForm(new AjaxOptions { Url = "/home/pupiltable", UpdateTargetId = "table" }))
-{ 
-    <label class="col-md-2">Klassen</label>
-    @Html.DropDownListFor(m => m.SelectedForm, new SelectList(Model.Forms, "FormId", "Name"), new { @class = "form-control col-md-8"})
-    <input type="submit" name="submit" class="btn btn-primary btn-sm col-md-2" value="Schüler anzeigen" />
-    <input type="submit" name="submit" class="btn btn-primary btn-sm col-md-2" value="Tests anzeigen" />
-}
+    <select id="selectForms" class="form-control col-md-8"></select>
+</div>
 
 <br />
-@*@Html.Partial("PartialPupilTable", Model.Pupils)*@
-<div id="table"></div>
+<div id="tablePupils">
+    <table class="table table-hover table-condensed">
+        <thead>
+            <tr><th>Nachname</th><th>Vorname</th><th>Geburtstag</th><th>Geschlecht</th></tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+
+</div>
 
 

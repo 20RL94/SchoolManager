@@ -16,6 +16,13 @@ namespace WebSchoolManager
     public class DtoPupil
     {
         public int PupilId { get; set; }
+        public string Lastname { get; set;}
+        public string Firstname { get; set; }
+        public string MatrikelNo { get; set; }
+        public string Sex { get; set; }
+        public String Birthday { get; set; }
+        public int FormId { get; set; }
+
         //...
     }
 
@@ -29,6 +36,19 @@ namespace WebSchoolManager
                 Name = form.Name
             };
         }
+        public static DtoPupil ToDto(this Pupil pupil)
+        {
+            return new DtoPupil
+            {
+                PupilId = pupil.PupilId,
+                Lastname = pupil.Lastname,
+                Firstname=pupil.Firstname,
+                MatrikelNo=pupil.MatrikelNo,
+                Birthday=pupil.Birthday.ToShortDateString(),
+                FormId=pupil.FormId,
+                Sex=pupil.Sex
+            };
+        }
     }
-
 }
+   
