@@ -17,10 +17,10 @@ namespace DataSchoolManager
 
         public SchoolContext() : base("Name=SchoolDb")
         {
-            //Database.SetInitializer(new SchoolContextInitializer());
+            Database.SetInitializer(new SchoolContextInitializer());
         }
 
-        private class SchoolContextInitializer : DropCreateDatabaseAlways<SchoolContext>
+        private class SchoolContextInitializer : DropCreateDatabaseIfModelChanges<SchoolContext>
         {
             protected override void Seed(SchoolContext context)
             {

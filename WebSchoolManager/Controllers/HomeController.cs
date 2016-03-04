@@ -13,6 +13,14 @@ namespace WebSchoolManager.Controllers
     {
         SchoolManager sm = new SchoolManager();
 
+        public JsonResult GetForms()
+        {
+            return Json(sm.RepForm.Get()
+                .Select(f => f.ToDto()),JsonRequestBehavior.AllowGet);
+            
+        }
+
+
         public ActionResult Index(IndexViewModel ivm)
         {
             ivm.Forms = sm.RepForm.Get();
