@@ -14,10 +14,12 @@ namespace DataSchoolManager
         public DbSet<Pupil> Pupils { get; set; }
         public DbSet<Test> Tests { get; set; }
         public DbSet<Mark> Marks { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Lesson> Lessons { get; set; }
 
         public SchoolContext() : base("Name=SchoolDb")
         {
-            Database.SetInitializer(new SchoolContextInitializer());
+            //Database.SetInitializer(new SchoolContextInitializer());
         }
 
         private class SchoolContextInitializer : DropCreateDatabaseIfModelChanges<SchoolContext>
@@ -31,6 +33,7 @@ namespace DataSchoolManager
         {
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
         }
+       
     }
 
     public class SchoolRepository<T> : EFRepository<T, SchoolContext> where T : class { }

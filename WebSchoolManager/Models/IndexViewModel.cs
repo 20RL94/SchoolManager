@@ -27,4 +27,11 @@ namespace WebSchoolManager.Models
         public int TestId { get; set; }
         public int SelectedForm { get; set; }
     }
+
+    public class PlanModel
+    {
+        public IEnumerable<Subject> subjects { get; set; }
+        public IEnumerable<Lesson> lessons { get; set; }
+        public int SelectedForm { get; set; }
+    }
 }
