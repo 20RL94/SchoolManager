@@ -16,8 +16,6 @@ namespace DataSchoolManager
         public SchoolRepository<Pupil> RepPupil { get; } = new SchoolRepository<Pupil>();
         public SchoolRepository<Test> RepTest { get; } = new SchoolRepository<Test>();
         public SchoolRepository<Mark> RepMark { get; } = new SchoolRepository<Mark>();
-        public SchoolRepository<Subject> RepSubj { get; } = new SchoolRepository<Subject>();
-        public SchoolRepository<Lesson> RepLes { get; } = new SchoolRepository<Lesson>();
 
         public event ProgressHandler Progress;
 
@@ -61,30 +59,7 @@ namespace DataSchoolManager
 
         public void PersistMark(int testid, int pupilid, int mark)
         {
-            Mark toUpdate = RepMark.Get(m => m.TestId == testid && m.PupilId == pupilid).FirstOrDefault();
-
-            if (toUpdate == null)
-            {
-                RepMark.Create(new Mark
-                {
-                    Value = mark,
-                    PupilId = pupilid,
-                    TestId = testid
-                });
-            }
-            else
-            {
-                toUpdate.Value = mark;
-                RepMark.Update(toUpdate);
-            }
-        }
-
-        public void PersistLesson(int unit, int day, Subject subject, int SelectedForm)
-        {
-            Lesson toUpdate = RepLes.Get(l => l.Unit == unit && l.DayOfWeek == day).FirstOrDefault();
-
-            toUpdate.SubjectId = subject.SubjectId;
-            RepLes.Update(toUpdate);
+            
         }
     }
 }

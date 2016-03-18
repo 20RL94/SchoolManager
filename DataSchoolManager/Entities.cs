@@ -57,28 +57,4 @@ namespace DataSchoolManager
         [ForeignKey("Test")]
         public int TestId { get; set; }
     }
-
-    public class Subject
-    {
-        public int SubjectId { get; set; }
-        public string Description { get; set; }
-
-        public override string ToString()
-        {
-            return Description;
-        }
-    }
-
-    public class Lesson
-    {
-        public int LessonId { get; set; }
-        public virtual Subject Subject { get; set; }
-        [ForeignKey("Subject")]
-        public int SubjectId { get; set; }
-        public int Unit { get; set; }
-        public int DayOfWeek { get; set; }
-        public virtual Form Form { get; set; }
-        [ForeignKey("Form")]
-        public int FormId { get; set; }
-    }
 }

@@ -1,69 +1,113 @@
-﻿$(function() {
-    loadForms();
+﻿var actualformid;
 
-    $("#selectForms").change(function () {
-        loadPupils($(this).val());
-    });
-
-    $("#backButton").click(function() {
-        $("#tablePupils").css("display", "");
-        $("#formPupil").css("display", "none");
-        loadPupils($("#selectForms").val());
-    });
-
-    $("#saveButton").click(function () {
-        $.post("home/savepupil", {
-            Firstname: $("#firstname").val(),
-            Lastname: $("#lastname").val(),
-            Sex: $("#sex").val(),
-            Birthday: $("#birthday").val(),
-            MatrikelNo: $("#matrikelNo").val(),
-            FormName: $("#form").val(),
-            PupilId: $("#pupilId").val()
-        }, function(data, status) {
-            alert("Success");
-        });
-    });
-});
+function toDateString(date) {
+    return new Date(parseInt(date.substr(6))).toLocaleDateString();
+}
 
 function loadForms() {
-    $.getJSON("/home/getforms", function (data) {
-        $.each(data, function(index, item) {
-            $("select").append('<option value="' + item.FormId + '">' + item.Name + '</option>');
+    $.getJSON("/home/getForms", function (data) {
+        $.each(data, function (index, item) {
+            $("select[id^=selectForms]")
+                .append($('<option value="' + item.FormId + '"' + (item.FormId == actualformid ? ' selected' : '') + '>' + item.Name + '</option>'))
         });
     });
 }
 
-function loadPupils(formId) {
-    $.getJSON("/home/getpupils", { formId: formId }, function (data) {
-        $("tbody").empty();
-        $.each(data, function (index, item) {
-            var imgScr = item.Sex === "m" ? '<img src="Images/man.png"></img>' : '<img src="Images/woman.png"></img>';
-            $('<tr>' + '<input type="hidden" value="' + item.PupilId + '"/>' + '<td>' + item.Lastname + '</td><td>' + item.Firstname + '</td><td>' + aspDateToJsDate(item.Birthday).toLocaleDateString() + '</td><td>' + imgScr + '</td></tr>')
-                .appendTo("tbody")
-                .css("cursor", "pointer")
-                .click(function() {
-                    $("#tablePupils").css("display", "none");
-                    $("#formPupil").css("display", "");
+function showPupilForm(show, pupil) {
+    $("#editPupil").dialog("open");
+    $("#editPupil #id").val(pupil != null ? pupil.PupilId : 0);
+    $("#editPupil #firstname").val(pupil != null ? pupil.FirstName : "");
+    $("#editPupil #lastname").val(pupil != null ? pupil.LastName : "");
+    $("#editPupil #matrikel").val(pupil != null ? pupil.MatrikelNo : "");
+    $("#editPupil #birthday").val(pupil != null ? toDateString(pupil.Birthday) : "");
+    $("#editPupil #sex").val(pupil != null ? pupil.Sex : "");
+    $("#editPupil #selectFormsPupil").val(pupil != null ? pupil.FormId : actualformid);
+   
+}
 
-                    loadPupil($(this).children("input").val());
+function getPupil() {
+    return {
+        PupilId: $("#editPupil #id").val(),
+        FirstName: $("#editPupil #firstname").val(),
+        LastName: $("#editPupil #lastname").val(),
+        MatrikelNo: $("#editPupil #matrikel").val(),
+        Birthday: $("#editPupil #birthday").val(),
+        Sex: $("#editPupil #sex").val(),
+        FormId: $("#editPupil #selectFormsPupil").val()
+    };
+}
+
+function loadPupilTable() {
+    $("#tablePupils tbody").empty();
+    $.getJSON("/home/getPupilsByForm?formid=" + actualformid, function (data) {
+        $.each(data, function (index, item) {
+            $('<tr><td>' + item.LastName + '</td><td>' + item.FirstName + '</td><td>' + toDateString(item.Birthday) + '</td><td></td></tr>')
+                .appendTo("#tablePupils tbody")
+                .css("cursor", "pointer")
+                .click(function () {
+                    showPupilForm(true, item);
                 });
         });
     });
 }
 
-function loadPupil(pupilId) {
-    $.getJSON("/home/getpupilbyid", { pupilId: pupilId }, function(data) {
-        $("#firstname").val(data[0].Firstname);
-        $("#lastname").val(data[0].Lastname);
-        $("#sex").val(data[0].Sex);
-        $("#birthday").val(aspDateToJsDate(data[0].Birthday).toLocaleDateString());
-        $("#matrikelNo").val(data[0].MatrikelNo);
-        $("#form").val(data[0].Form);
-        $("#pupilId").val(data[0].PupilId);
-    });
-}
+$(function () {
 
-function aspDateToJsDate(aspDate) {
-    return new Date(parseInt(aspDate.replace("/Date(", "").replace(")/", ""), 10));
-}
+    $("#tabs").tabs();
+    $("#editPupil").dialog({
+        autoOpen: false,
+        modal:true,
+        width: 600,
+        title: "Edit Pupil Information",
+        buttons: [
+            {
+                text:"Save",
+                click: function () {
+                    $.post("/home/savepupil", getPupil());
+                }
+            },
+            {
+                text: "Close",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }
+        ]
+    });
+
+    $("#birthday").datepicker($.datepicker.regional["de"]);
+    $("#search").autocomplete({
+        source:function(request,response)
+        {
+            $.get("/home/GetPupilsByPattern?pattern=" + $("#search").val(), function (data) {
+                response($.map(data, function (item) {
+                    return { label: item.FirstName + " " + item.LastName, value: item.PupilId };
+                }));
+            });
+        },
+        minLength: 2,
+        select: function (event, ui) {
+            // label(firstname+lastname) will be displayed instead of id in searchbar
+            $("#search").val(ui.item.label);
+            // prevent the first event of searchbar click-> label:name -> value:id will be put on searchbar
+            event.preventDefault();
+            $.get("/home/getPupilById", { pupilId: ui.item.value }, function (data) {
+                //pop up dialog
+                showPupilForm(true, data);
+            });
+        }
+    });
+
+    loadForms();
+
+    $("#selectForms").change(function () {
+        actualformid = $(this).val();
+        loadPupilTable();
+    });
+
+    $("#buttonNew").click(function () {
+        showPupilForm(true);
+    });
+
+    
+});

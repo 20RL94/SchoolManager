@@ -2,11 +2,12 @@
 
 @{
     ViewBag.Title = "EditPupil";
+    Layout = null;
 }
 
 <h2>Schülerdaten ändern</h2>
 
-@using (Html.BeginForm("SavePupil", "Home"))
+@using (Ajax.BeginForm(new AjaxOptions { Url = "/home/savepupil" }))
 {
     @Html.AntiForgeryToken()
     
@@ -63,9 +64,9 @@
         </div>
 
         <div class="form-group">
-            @Html.ActionLink("Zurück zur Übersicht", "Index", new { SelectedForm = Model.FormId }, new { @class = "btn btn-primary btn-sm col-md-2" })
             <div class="col-md-10">
-                <input type="submit" value="Speichern" class="btn btn-primary btn-sm col-md-10" />
+                <input id="buttonBack" type="button" value="Zurück" class="btn btn-primary btn-sm" />
+                <input type="submit" value="Speichern" class="btn btn-primary btn-sm" />
             </div>
         </div>
     </div>

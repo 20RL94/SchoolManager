@@ -1,10 +1,7 @@
 ﻿using DataSchoolManager;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using WebSchoolManager.Models;
 
 namespace WebSchoolManager.Controllers
 {
@@ -15,39 +12,65 @@ namespace WebSchoolManager.Controllers
 
         public JsonResult GetForms()
         {
-            return Json(sm.RepForm.Get().Select(f => f.ToDto()), JsonRequestBehavior.AllowGet);
+            return Json(sm.RepForm.Get()
+                          .Select(f => new { FormId = f.FormId,
+                                             Name = f.Name }),
+                                   JsonRequestBehavior.AllowGet);
         }
-
-        public JsonResult GetPupils(int formId)
-        {
-            return Json(sm.RepPupil.Get(p => p.FormId == formId, "Form").Select(p => p.ToDto()), JsonRequestBehavior.AllowGet);
-        }
-
         public JsonResult GetPupilById(int pupilId)
         {
-            return Json(sm.RepPupil.Get(p => p.PupilId == pupilId, "Form").Select(p => p.ToDto()), JsonRequestBehavior.AllowGet);
+            return Json(sm.RepPupil.Get(p => p.PupilId == pupilId)
+                          .Select(p => new
+                          {
+                              PupilId = p.PupilId,
+                              MatrikelNo = p.MatrikelNo,
+                              FirstName = p.Firstname,
+                              LastName = p.Lastname,
+                              Birthday = p.Birthday,
+                              Sex = p.Sex,
+                              FormId = p.FormId
+                          }).FirstOrDefault(), JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetPupilsByForm(int formid)
+        {
+            return Json(sm.RepPupil.Get(p => p.FormId == formid)
+                          .Select(p => new
+                          {
+                              PupilId = p.PupilId,
+                              MatrikelNo = p.MatrikelNo,
+                              FirstName = p.Firstname,
+                              LastName = p.Lastname,
+                              Birthday = p.Birthday,
+                              Sex = p.Sex,
+                              FormId = p.FormId
+                          }), JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetPupilsByPattern(string pattern)
+        {
+            return Json(sm.RepPupil.Get(p => p.Lastname.ToLower().StartsWith(pattern.ToLower())||
+                                             p.Lastname.ToLower().StartsWith(pattern.ToLower()))
+                          .Select(p => new
+                          {
+                              PupilId = p.PupilId,
+                              FirstName = p.Firstname,
+                              LastName = p.Lastname,
+                          }), JsonRequestBehavior.AllowGet);
         }
 
-        public void SavePupil(Pupil p, string formName)
+        [HttpPost]
+        public void SavePupil(Pupil pupil)
         {
-            p.FormId = sm.RepForm.Get(f => f.Name == formName).ToList()[0].FormId;
-            sm.RepPupil.Update(p);
+            Pupil p = sm.RepPupil.GetByKey(pupil.PupilId);
+            if (p != null)
+                sm.RepPupil.Update(pupil);
+            else
+                sm.RepPupil.Create(pupil);
         }
 
         public ActionResult Index()
         {
             return View();
         }
-
-
-        [HttpPost]
-        public ActionResult Import(HttpPostedFileBase file)
-        {
-            if ( file != null && file.ContentLength > 0 )
-                sm.Import(file.InputStream);
-            return RedirectToAction("Index", new IndexViewModel());
-        }
-
 
         public ActionResult EditPupil(int? pupilid)
         {
@@ -57,121 +80,30 @@ namespace WebSchoolManager.Controllers
                 ViewBag.Forms = sm.RepForm.Get();
                 return View(p);
             }
-            return RedirectToAction("Index", "Home", new IndexViewModel());
-        }
-        /*
-        public ActionResult SavePupil(Pupil p)
-        {
-            sm.RepPupil.Update(p);
-            return RedirectToAction("Index", "Home", new IndexViewModel { SelectedForm = p.FormId });
-        }*/
-
-        public PartialViewResult PupilTable(int SelectedForm, string submit)
-        {
-            if ( submit == "Tests anzeigen")
-            {
-                var tvm = new TestViewModel
-                {
-                    Pupils = sm.RepPupil.Get(p => p.FormId == SelectedForm, "Marks"),
-                    Tests = sm.RepTest.Get(t => t.FormId == SelectedForm),
-                    SelectedForm = SelectedForm
-                };
-                return PartialView("PartialTestTable", tvm);
-            }
-            else if ( submit == "Stundenplan anzeigen")
-            {
-                //sm.RepSubj.Create(new Subject { Description = "DBI" });
-                //sm.RepSubj.Create(new Subject { Description = "NVS" });
-                //sm.RepSubj.Create(new Subject { Description = "PROO" });
-                for (var i = 1; i <= 10; i++)
-                {
-                    var lesson = sm.RepLes.Get(l => l.Unit == i);
-                    for (var j = 1; j <= 5; j++)
-                    {
-                        lesson = lesson.Where(l => l.DayOfWeek == j);
-                        lesson = lesson.Where(l => l.FormId == SelectedForm);
-                        if (lesson.FirstOrDefault() == null)
-                        {
-                            sm.RepLes.Create(new Lesson
-                            {
-                                DayOfWeek = j,
-                                Unit = i,
-                                FormId = SelectedForm,
-                                SubjectId = 1
-                            });
-                        }
-                    }
-                }
-                var pm = new PlanModel
-                {
-                    SelectedForm = SelectedForm,
-                    lessons = sm.RepLes.Get(),
-                    subjects = sm.RepSubj.Get()
-                };
-                return PartialView("SubjectTable", pm);
-            }
-            else
-                return PartialView("PartialPupilTable", sm.RepPupil.Get(p => p.FormId == SelectedForm));
+            return RedirectToAction("Index", "Home");
         }
 
-        public ActionResult SaveMarks(int SelectedForm)
+
+        [HttpPost]
+        public ActionResult Import(HttpPostedFileBase file)
         {
-            foreach ( var key in Request.Form.AllKeys)
-            {
-                string[] ids = key.Split('_');
-                if ( ids[0] == "mark")
-                {
-                    int testid = int.Parse(ids[1]);
-                    int pupilid = int.Parse(ids[2]);
-                    int mark = int.Parse(Request.Form[key]);
-                    sm.PersistMark(testid, pupilid, mark);
-                }
-            }
-            return RedirectToAction("Index", new { SelectedForm = SelectedForm });
+            if ( file != null && file.ContentLength > 0 )
+                sm.Import(file.InputStream);
+            return RedirectToAction("Index");
         }
 
-        public ActionResult AddTest(int SelectedForm)
+        public ActionResult About()
         {
-            return View(new Test
-            {
-                FormId = SelectedForm
-            });
+            ViewBag.Message = "Your application description page.";
+
+            return View();
         }
 
-        public ActionResult SaveTest(Test t)
+        public ActionResult Contact()
         {
-            sm.RepTest.Create(t);
+            ViewBag.Message = "Your contact page.";
 
-            return RedirectToAction("Index", new { SelectedForm = t.FormId });
-        }
-
-        public PartialViewResult MarkSelection(int SelectedForm, int testid,  int pupilid, int markValue)
-        {
-            sm.PersistMark(testid, pupilid, markValue);
-
-            return PartialView("PartialMarkSelection", new MarkSelectionModel
-            {
-                SelectedForm = SelectedForm,
-                Pupil = sm.RepPupil.Get(p => p.PupilId == pupilid, "Marks").FirstOrDefault(),
-                TestId = testid
-            });
-        }
-
-        public ActionResult ChangeMode(int SelectedForm)
-        {
-            foreach (var key in Request.Form.AllKeys)
-            {
-                string[] ids = key.Split('_');
-                if (ids[0] == "subject")
-                {
-                    int hour = int.Parse(ids[1]);
-                    int dateOfWeek = int.Parse(ids[2]);
-                    string subjectDescription = Request.Form[key];
-                    Subject subject = sm.RepSubj.Get(s => s.Description == subjectDescription).FirstOrDefault();
-                    sm.PersistLesson(hour, dateOfWeek, subject, SelectedForm);
-                }
-            }
-            return RedirectToAction("Index", new { SelectedForm = SelectedForm });
+            return View();
         }
     }
 }

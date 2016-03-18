@@ -2,72 +2,92 @@
     ViewBag.Title = "Startseite";
 }
 <br />
-<form action="/home/import" method="post" enctype="multipart/form-data">
-    <input id="file" name="file" type="file" style="display:inline"/>
-    <input type="submit" value="Schülerdaten importieren" class="btn btn-primary btn-sm" />
-</form>
-<br/>
 
-<div>
-    <label class="col-md-2">Klassen</label>
-    <select id="selectForms" class="form-control col-md-8"></select>
+<div id="tabs">
+    <ul>
+        <li><a href="#import">Import</a></li>
+        <li><a href="#list">Class List</a></li>
+    </ul>
+    <div id="import">
+        @*#import -> import*@
+        <form action="/home/import" method="post" enctype="multipart/form-data">
+            <input id="file" name="file" type="file" style="display:inline" />
+            <input type="submit" value="Schülerdaten importieren" class="btn btn-primary btn-sm" />
+        </form>
+    </div>
+    <div id="list">
+        @*#list -> list*@
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-md-1">Klassen</label>
+            <select id="selectForms" class="form-control col-md-2"></select>
+            <button id="buttonNew" class="btn btn-primary btn-sm col-md-2">Add Pupil</button>
+            <label class="control-label col-md-1">Search </label>
+            <input id="search" type="text" class="form-control col col-md-2"/>
+        </div>
+    </div>
+    <br />
+    <div id="tablePupils">
+        <h2>Klassenliste</h2>
+        <table class="table table-hover table-condensed">
+            <thead>
+                <tr><th>Nachname</th><th>Vorname</th><th>Geburtstag</th><th>Geschlecht</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="editPupil" style="display:none">
+        <input type="hidden" id="id" />
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-md-4">Vorname</label>
+                <div class="col-md-8">
+                    <input id="firstname" type="text" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-4">Nachname</label>
+                <div class="col-md-8">
+                    <input id="lastname" type="text" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-4">Matrikelnummer</label>
+                <div class="col-md-8">
+                    <input id="matrikel" type="text" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-4">Geschlecht</label>
+                <div class="col-md-8">
+                    <select id="selectSex" class="form-control icon-menu">
+                        <option value="m" style="background-image:url(/Images/man.png)">m</option>
+                        <option value="w" style="background-image:url(/Images/woman.png)">w</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-4">Geburtstag</label>
+                <div class="col-md-8">
+                    <input id="birthday" type="text" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-4">Klasse</label>
+                <div class="col-md-8">
+                    <select id="selectFormsPupil" class="form-control"></select>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    </div>
 </div>
-<br/>
 
-<table id="tablePupils" class="table table-hover table-condensed">
-    <thead>
-    <tr><th>Nachname</th><th>Vorname</th><th>Geburtstag</th><th>Geschlecht</th></tr>
-    </thead>
-    <tbody>
 
-    </tbody>
-</table>
 
-<div id="formPupil" style="display: none">
-    <br/>
-    <hr/>
-    <input id="pupilId" type="hidden" class="form-control" />
-    <div class="form-group">
-        <label class="control-label col-md-2">Vorname</label>
-        <div class="col-md-10">
-            <input id="firstname" type="text" class="form-control"/>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-md-2">Nachname</label>
-        <div class="col-md-10">
-            <input id="lastname" type="text" class="form-control"/>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-md-2">Matrikelnummer</label>
-        <div class="col-md-10">
-            <input id="matrikelNo" type="text" class="form-control"/>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-md-2">Geschlecht</label>
-        <div class="col-md-10">
-            <input id="sex" type="text" class="form-control"/>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-md-2">Geburtstag</label>
-        <div class="col-md-10">
-            <input id="birthday" type="text" class="form-control"/>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-md-2">Klasse</label>
-        <div class="col-md-10">
-            <input id="form" type="text" class="form-control"/>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <button id="backButton" class="btn btn-primary btn-sm">Zurück</button>
-        <button id="saveButton" class="btn btn-primary btn-sm">Speichern</button>
-    </div>
-</div>
 
 
