@@ -1,0 +1,42 @@
+﻿@model WebSchoolManager.Models.TestViewModel
+
+@using (Html.BeginForm("SaveMarks", "Home", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.SelectedForm)
+    <table class="table table-hover table-condensed">
+        <thead>
+            <tr><th>Nachname</th><th>Vorname</th>
+            @foreach (var test in Model.Tests)
+            {
+                <th>@test.Description</th>
+            }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model.Pupils)
+            {
+                <tr>
+                    <td>@p.Lastname</td>
+                    <td>@p.Firstname</td>
+                    @foreach (var test in Model.Tests)
+                    {
+                        var mark = p.Marks.Where(m => m.TestId == test.TestId).FirstOrDefault();
+                        @*<td>
+                            @Html.DropDownList("mark_" + test.TestId + "_" + p.PupilId,
+                                        new SelectList(new int[] { 1, 2, 3, 4, 5 }, mark))
+                        </td>*@
+                        <td >
+                            @Html.Partial("PartialMarkSelection", new WebSchoolManager.Models.MarkSelectionModel
+                            {
+                                SelectedForm = Model.SelectedForm,
+                                Pupil = p,
+                                TestId = test.TestId
+                            })
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+    <input type="submit" value="Speichern" class="btn btn-primary btn-sm" />
+}

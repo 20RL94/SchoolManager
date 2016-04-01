@@ -1,0 +1,22 @@
+﻿@model IEnumerable<DataSchoolManager.Pupil>
+
+<table class="table table-hover table-condensed">
+    <thead>
+        <tr><th>Nachname</th><th>Vorname</th><th>Geburtstag</th><th>Geschlecht</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            string sex = p.Sex == "m" ? "/images/man.png" : "/images/woman.png";
+            <tr>
+                <td>@p.Lastname</td>
+                <td>@p.Firstname</td>
+                <td>@p.Birthday.ToShortDateString()</td>
+                <td><img src="@sex" /></td>
+                <td>@Html.ActionLink("bearbeiten...", "EditPupil", "Home", new { pupilid = p.PupilId }, new { @class = "btn btn-primary btn-sm" })</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

@@ -1,0 +1,13 @@
+﻿@model WebSchoolManager.Models.MarkSelectionModel
+
+@for ( int i=1; i<=5; i++)
+{
+    var mark = Model.Pupil.Marks.Where(m => m.TestId == Model.TestId).FirstOrDefault();
+    string css = "btn btn-sm" + (mark != null && mark.Value == i ? " btn-success" : " btn-default");
+    @Ajax.ActionLink(
+        i.ToString(),
+        "MarkSelection",
+        new  { SelectedForm = Model.SelectedForm, testid = Model.TestId, pupilid = Model.Pupil.PupilId, mark = i },
+        new AjaxOptions { UpdateTargetId = "" },
+        new { @class = css })
+}

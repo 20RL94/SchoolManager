@@ -1,0 +1,50 @@
+﻿@model WebSchoolManager.Models.PlanModel
+
+@using (Html.BeginForm("ChangeMode", "Home", FormMethod.Post))
+{
+    <input type="submit" value="Change Mode" class="btn btn-primary btn-sm" />
+    @Html.HiddenFor(m => m.SelectedForm)
+    <table class="table table-hover table-condensed">
+        <thead>
+            <tr>
+                <th>Einheit</th>
+                <th>Montag</th>
+                <th>Dienstag</th>
+                <th>Mittwoch</th>
+                <th>Donnerstag</th>
+                <th>Freitag</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (var i = 1; i < 11; ++i)
+            {
+                <tr>
+                    <td>@i</td>
+                    @for (var j = 1; j <= 5; ++j)
+                    {
+                        var selectedLesson = Model.lessons
+                            .Where(l => l.DayOfWeek == j
+                                && l.Unit == i
+                                && l.FormId == Model.SelectedForm)
+                            .FirstOrDefault();
+                        var selectedSubjectString = Model.subjects.FirstOrDefault().SubjectId;
+                        var selectedSubject = Model.subjects.FirstOrDefault();
+                        if (selectedLesson != null)
+                        {
+                            selectedSubject = Model.subjects.Where(s => s.SubjectId == selectedLesson.SubjectId).FirstOrDefault();
+                            if (selectedSubject != null )
+                            {
+                                selectedSubjectString = selectedSubject.SubjectId;
+                            }
+                        }
+                        <td>
+                            @Html.DropDownList("subject_" + i + "_" + j,
+                                 new SelectList(Model.subjects, selectedSubject),
+                                 new { @class = "form-control col-md-8" })
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
