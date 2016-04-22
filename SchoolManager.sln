@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSchoolManager", "WebScho
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataSchoolManager", "DataSchoolManager\DataSchoolManager.csproj", "{BA5ADE4E-5F75-4175-8C03-26B1B89B07DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTSchoolService", "RESTSchoolService\RESTSchoolService.csproj", "{2B844195-E629-484C-88B2-D011F4F2FE43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{BA5ADE4E-5F75-4175-8C03-26B1B89B07DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA5ADE4E-5F75-4175-8C03-26B1B89B07DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA5ADE4E-5F75-4175-8C03-26B1B89B07DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B844195-E629-484C-88B2-D011F4F2FE43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B844195-E629-484C-88B2-D011F4F2FE43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B844195-E629-484C-88B2-D011F4F2FE43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B844195-E629-484C-88B2-D011F4F2FE43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
